@@ -26,18 +26,22 @@ app.get('/api', (req, res) => {
   res.json({ unix: unixTimestamp, utc: date });
 });
 
-const invalidDate  = (date)=>{
-  date.toUTCString() === "Invalid Date";
-}
+const invalidDate  = (date)=>date.toUTCString() === "Invalid Date";
+
 
 app.get("/api/:date", (req, res) => {
   
   let date = new Date(req.params.date);
-  if(invalidDate(date))
-  date=new Date(+req.params.date);
 
-  if(invalidDate(date))
-  res.json({error:"Invalid Date"});
+  if(invalidDate(date)){
+    date=new Date(+req.params.date);
+    console.log(date);
+  }
+
+  if(invalidDate(date)){
+    res.json({error:"Invalid Date"});
+    return;
+  }
 
   res.json({unix:date.getTime(),utc:date.toUTCString()});
 
