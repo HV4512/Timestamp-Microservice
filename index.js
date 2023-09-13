@@ -26,22 +26,20 @@ app.get('/api', (req, res) => {
   res.json({ unix: unixTimestamp, utc: date });
 });
 
-app.get("/api/:time", (req, res) => {
-  const Time = req.params.time;
-  let unixTimestamp;
-  if (Time.length < 10 && Time.length > 0) {
-    res.json({ error: "Invalid Date" });
-  }
-  if (Time.length === 10) {
-    unixTimestamp = Date.parse(Time);
-  }
-  else {
-    unixTimestamp = parseInt(Time);
-  }
-  console.log(unixTimestamp);
-  let date = new Date(unixTimestamp).toUTCString();
-  console.log(date);
-  res.json({ unix: unixTimestamp, utc: date });
+const invalidDate  = (date)=>{
+  date.toUTCString() === "Invalid Date";
+}
+
+app.get("/api/:date", (req, res) => {
+  
+  let date = new Date(req.params.date);
+  if(invalidDate(date))
+  date=new Date(+req.params.date);
+
+  if(invalidDate(date))
+  res.json({error:"Invalid Date"});
+
+  res.json({unix:date.getTime(),utc:date.toUTCString()});
 
 });
 
