@@ -25,9 +25,7 @@ app.get('/api', (req, res) => {
   console.log(date);
   res.json({ unix: unixTimestamp, utc: date });
 });
-const isInvalidDate = (date)=>{
-  date.toUTCString() === "Invalid Date"
-};
+
 app.get("/api/:time", (req, res) => {
   const Time = req.params.time;
   let unixTimestamp;
@@ -40,8 +38,6 @@ app.get("/api/:time", (req, res) => {
   else {
     unixTimestamp = parseInt(Time);
   }
-  if(isInvalidDate(unixTimestamp))
-  res.json({error:"Invalid date"})
   console.log(unixTimestamp);
   let date = new Date(unixTimestamp).toUTCString();
   console.log(date);
